@@ -25,7 +25,9 @@
 const unsigned long TEN_SECOND_IN_MILLISECOND = (10UL * 1000 * 1);
 const unsigned long MINUTE_IN_MILLISECOND = (60UL * 1000 * 1);
 const unsigned long RUN_DURATION_LIMIT = (1 * TEN_SECOND_IN_MILLISECOND);
-const float waterLimitLevel = 3;
+const float WATER_LIMIT_LEVEL = 3.0;
+const float VOICE_SPEED_AIR = 0.034 / 2;
+const float VOICE_SPEED_WATER = 0.1480 / 2;
 
 bool engineFlag = false;
 char printBuffer[128];
@@ -76,7 +78,7 @@ float readWaterLevel() {
   delayMicroseconds(10);
   digitalWrite(HCSR04_PIN_TRIG, LOW);
   duration = pulseIn(HCSR04_PIN_ECHO, HIGH);
-  distance = duration * 0.034 / 2;
+  distance = duration * VOICE_SPEED_AIR;
   debugln(distance);
 
   debug("Distance calculation result:");
@@ -94,7 +96,7 @@ void waterFiller() {
   debug("waterlevel:");
   debugln(waterLevel);
 
-  if (waterLevel < waterLimitLevel ) {
+  if (waterLevel < WATER_LIMIT_LEVEL ) {
     runMotorCw(MOTORDRIVER_FILL_WATER_3, MOTORDRIVER_FILL_WATER_4);
     debugln("water filler motor is on");
     delay(1000);
